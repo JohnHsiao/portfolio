@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+    "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+	<form-beans>
+		
+		<form-bean name="VoteForm" type="org.apache.struts.action.DynaActionForm">
+	  		<form-property name="username" type="java.lang.String" />
+	  		<form-property name="password" type="java.lang.String" />	  		
+	  		<form-property name="act_oid" type="java.lang.String" initial="" />
+			<form-property name="path" type="java.lang.String" initial="" />
+	  	</form-bean>
+		
+	</form-beans>
+
+	<global-forwards>
+		<forward name="Welcome" path="/index.jspx" />
+	</global-forwards>
+
+	<action-mappings>
+
+		<action path="/index"
+				type="struts.action.WelcomeAction" 
+				scope="request"
+				input="/Welcome.do">
+			<forward name="continue" path="/main.jsp" />
+		</action>
+		
+		<!-- 固定頁面 -->
+		<action forward="/html/whatisthis.jsp" path="/whatisthis" />
+		<action forward="/html/jspx/howto.jsp" path="/howto" />
+		<action forward="/html/showExample.jsp" path="/showExample" />
+		<action forward="/html/resource.jsp" path="/resource" />
+		<action forward="/html/faq.jsp" path="/faq" />
+		<action forward="/html/student.jsp" path="/student" />
+		<action forward="/html/teacher.jsp" path="/teacher" />
+		<action forward="/html/graduate.jsp" path="/graduate" />
+		<action forward="/html/learning.jsp" path="/learning" />		
+		<action forward="/vote.jsp" path="/vote" />
+		
+		
+		<!-- 檢視班級 -->
+		<action path="/ClassInfo"	       
+		   type="struts.action.ClassInfoAction"
+	       scope="session"
+	       parameter="method"
+	       input="/Welcome.do">
+	       <forward name="ClassInfo" path="/html/classInfo.jsp" />
+	    </action>
+		
+		<!-- 票選功能 -->
+		<action path="/Vote"
+	       name="VoteForm"
+		   type="struts.action.VoteAction"
+	       scope="session"
+	       parameter="method"
+	       input="/Welcome.do">
+	       <forward name="vote" path="/vote.jsp" />
+	    </action>
+	    
+	    <!-- 活動頁面 -->
+		<action path="/JoinParty"	       
+		   type="struts.action.john.JoinPartyAction"
+	       scope="session"
+	       parameter="method"
+	       input="/Welcome.do">
+	       <forward name="joinParty" path="/html/joinParty.jsp" />
+	    </action>
+		
+	</action-mappings>
+
+	<message-resources parameter="struts.messages.GLOBAL" null="false" />
+
+</struts-config>

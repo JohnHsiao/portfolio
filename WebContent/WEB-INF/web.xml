@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	version="2.4">
+
+	<display-name>e - Portfolio</display-name>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext.xml</param-value>
+	</context-param>
+
+	<!-- filter -->
+	<!-- 頁面編碼過濾 -->
+	<filter>
+		<filter-name>SetCharacterEncoding</filter-name>
+		<filter-class>service.SetCharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>SetCharacterEncoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- url sessionId過濾 -->
+	<filter>
+		<filter-name>DisableUrlSessionFilter</filter-name>
+		<filter-class>service.DisableUrlSessionFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>DisableUrlSessionFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 錯誤處理 -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+
+
+	<!-- servlet -->
+	<servlet>
+		<servlet-name>SpringContextServlet</servlet-name>
+		<servlet-class>
+			org.springframework.web.context.ContextLoaderServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>
+			org.apache.struts.action.ActionServlet
+		</servlet-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>/WEB-INF/struts-config.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>3</param-value>
+		</init-param>
+		<init-param>
+			<param-name>detail</param-name>
+			<param-value>3</param-value>
+		</init-param>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.jspx</url-pattern>
+	</servlet-mapping>
+
+	<!-- 取得模版-->
+	<servlet>
+		<servlet-name>myPortfolio</servlet-name>
+		<servlet-class>servlet.myPortfolio</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>myPortfolio</servlet-name>
+		<url-pattern>/myPortfolio</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 取得新聞-->
+	<servlet>
+		<servlet-name>GetNews</servlet-name>
+		<servlet-class>servlet.GetNews</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetNews</servlet-name>
+		<url-pattern>/GetNews</url-pattern>
+	</servlet-mapping>
+	
+	<!-- Ajax 取新聞 -->
+  	<servlet>
+		<servlet-name>feedback</servlet-name>
+		<servlet-class>servlet.feedback</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+		<servlet-name>feedback</servlet-name>
+		<url-pattern>/feedback</url-pattern>
+  	</servlet-mapping>
+</web-app>
+
