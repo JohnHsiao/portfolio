@@ -56,6 +56,6 @@ public class GetNews extends HttpServlet{
 		
 		out.println("</pront>");
 		out.close();
-		
+		ctx=null;
 	}
 }

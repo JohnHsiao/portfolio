@@ -50,6 +50,7 @@ public class feedback extends HttpServlet{
 		HttpSession session = request.getSession(false);
 		session.setAttribute("account", username);//儲存我的帳號
 		response.sendRedirect("myPortfolio?path="+path+"&page="+Oid);
+		ctx=null;
 	}
 
 }

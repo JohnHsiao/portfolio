@@ -30,11 +30,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import dao.orm.EpsUser;
-
+import service.impl.DataFinder;
 import service.impl.DefaultManagerImpl;
 
 /**
@@ -71,7 +73,8 @@ public class myPortfolio extends HttpServlet {
 		String tag=null;//文章分類
 		String page=request.getParameter("page");//文章	
 		if(request.getParameter("tag")!=null){
-			tag=new String((request.getParameter("tag")).getBytes("iso-8859-1"),"utf8");//將url分類轉碼
+			//tag=new String((request.getParameter("tag")).getBytes("iso-8859-1"),"utf8");//將url分類轉碼
+			tag=new String((request.getParameter("tag")));//將url分類轉碼
 		}
 		
 		EpsUser user=null;
@@ -131,7 +134,8 @@ public class myPortfolio extends HttpServlet {
 		
 		byte[] tmp = output.trim().getBytes("UTF-8");
 		stream.write(tmp);		
-		stream.close();				
+		stream.close();	
+		ctx=null;
 	}
 	
 	/**
@@ -224,6 +228,7 @@ public class myPortfolio extends HttpServlet {
 			
 			return sb1.toString();
 		}
+		ctx=null;
 		return output;
 	}
 	
@@ -244,7 +249,7 @@ public class myPortfolio extends HttpServlet {
 		}catch(Exception e){
 			return output;
 		}
-		
+		ctx=null;
 		return output;
 	}
 	
@@ -265,10 +270,13 @@ public class myPortfolio extends HttpServlet {
 			}else{
 				output=output.replaceAll("#頁面名稱#", str);
 			}
+			ctx=null;
 			return output;
 		}catch(Exception e){
+			ctx=null;
 			return output;
 		}
+		
 	}	
 	
 	/**
@@ -279,6 +287,9 @@ public class myPortfolio extends HttpServlet {
 	 */
 	private String getTag2List(String Uid, String tag, String output, String path){
 		WebApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
+		//AbstractApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:../");
+    	//ctx.registerShutdownHook();
+		
 		DefaultManagerImpl manager = (DefaultManagerImpl) ctx.getBean("defaultManager");
 		//System.out.println("SELECT Oid, title, editime FROM Eps_pages WHERE title<>'index' AND Uid='"+Uid+"'");
 		
@@ -288,6 +299,7 @@ public class myPortfolio extends HttpServlet {
 			output=getSubTitle(Uid, "全部文章列表", output);
 			tag="全部文章列表";
 		}else{
+			System.out.println("SELECT Oid, title, editime FROM Eps_pages WHERE title<>'index' AND Uid='"+Uid+"' AND tag='"+tag+"'");
 			list=manager.sqlGet("SELECT Oid, title, editime FROM Eps_pages WHERE title<>'index' AND Uid='"+Uid+"' AND tag='"+tag+"'");
 			output=getSubTitle(Uid, manager.sqlGetStr("SELECT tag FROM Eps_pages WHERE tag='"+tag+"' AND Uid='"+Uid+"' limit 1"), output);
 		}
@@ -315,6 +327,7 @@ public class myPortfolio extends HttpServlet {
 			sb1.insert(y, sb);		
 			return sb1.toString();
 		}
+		ctx=null;
 		return output;
 	}	
 	
@@ -345,7 +358,7 @@ public class myPortfolio extends HttpServlet {
 			sb1.insert(y, sb);		
 			return sb1.toString();
 		}
-		
+		ctx=null;
 		return output;
 	}	
 	
@@ -372,6 +385,7 @@ public class myPortfolio extends HttpServlet {
 		//System.out.println(user.getpath());
 		header.append(manager.sqlGetStr("SELECT et.template FROM Eps_template et, Eps_user eu " +
 				"WHERE et.Oid=eu.headerStyle AND eu.Uid='"+user.getUid()+"' AND type='H'"));//加入head模版		
+		ctx=null;
 		return header.toString()+output;
 	}
 	
@@ -385,6 +399,7 @@ public class myPortfolio extends HttpServlet {
 		DefaultManagerImpl manager = (DefaultManagerImpl) ctx.getBean("defaultManager");		
 		
 		StringBuilder footer=new StringBuilder(manager.sqlGetStr("SELECT template FROM Eps_template WHERE Oid='"+footOid+"'"));		
+		ctx=null;
 		return output+footer.toString();
 	}
 	
@@ -419,7 +434,7 @@ public class myPortfolio extends HttpServlet {
 			sb1.insert(y, sb);		
 			return sb1.toString();
 		}
-		//System.out.println(sb);
+		ctx=null;
 		return output;
 	}
 	
@@ -497,7 +512,7 @@ public class myPortfolio extends HttpServlet {
 			}
 			
 		}
-		
+		ctx=null;
 		return output;
 	}
 	
@@ -518,6 +533,7 @@ public class myPortfolio extends HttpServlet {
 			
 			return sb.toString();
 		}
+		ctx=null;
 		return output;
 	}
 	
@@ -558,6 +574,7 @@ public class myPortfolio extends HttpServlet {
 			sb1.insert(y, sb);		
 			return sb1.toString();
 		}
+		ctx=null;
 		return output;
 	}
 	
@@ -596,6 +613,7 @@ public class myPortfolio extends HttpServlet {
 			sb1.insert(y, sb);		
 			return sb1.toString();
 		}
+		ctx=null;
 		return output;
 	}
 	
@@ -636,6 +654,7 @@ public class myPortfolio extends HttpServlet {
 			sb1.insert(y, sb);		
 			return sb1.toString();
 		}
+		ctx=null;
 		return output;
 	}
 	
@@ -670,6 +689,7 @@ public class myPortfolio extends HttpServlet {
 			sb1.insert(y, sb);		
 			return sb1.toString();
 		}
+		ctx=null;
 		return output;
 	}
 	
@@ -708,6 +728,7 @@ public class myPortfolio extends HttpServlet {
 				return sb.toString();
 			}
 		}
+		ctx=null;
 		return output;
 	}
 	
@@ -777,6 +798,7 @@ public class myPortfolio extends HttpServlet {
 			//System.out.println(pic);
 			return sb.toString();
 		}
+		ctx=null;
 		return output;
 	}
 	
@@ -804,6 +826,7 @@ public class myPortfolio extends HttpServlet {
 				//System.out.println("UPDATE Eps_user SET counter=counter+1 WHERE path='"+path+"'");
 			}
 		}
+		ctx=null;
 	}
 	
 	/**
@@ -884,7 +907,7 @@ public class myPortfolio extends HttpServlet {
 			sb.append(((Map)list.get(i)).get("content").toString());
 			sb.append("</td></tr></table>");
 		}
-		//output=output+sb.toString();
+		ctx=null;
 		return sb.toString();
 	}
 	
@@ -918,6 +941,7 @@ public class myPortfolio extends HttpServlet {
 				return sb.toString();
 			}
 		}
+		ctx=null;
 		return output;
 	}
 	
